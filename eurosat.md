@@ -27,7 +27,7 @@ Our primary dataset is EuroSAT, a publicly available collection of 27,000 images
   <img src="images/figure1_eurosat.png" alt="Sample EuroSAT Images" width="1000"/>
   <figcaption><em>Figure 1: Samples of the 10 land cover and land usage labels in EuroSAT. [3]</em></figcaption>
 </figure>  
-<br><br>
+<br>  
   
 #### Non-Image Data
 To supplement the images with non-image data, we first extracted the latitude and longitude coordinates embedded in the metadata of the EuroSAT multispectral .tif files. Each image’s geographic center was then mapped to a country based on shapefile boundaries.  
@@ -44,7 +44,7 @@ In the original EuroSAT paper, Helber et al. benchmarked several models across d
   <img src="images/table1_eurosat.png" alt="EuroSAT Benchmarks" width="1000"/>
   <figcaption><em>Table I: Classification accuracy across different train-test splits from Helber et al. [3]</em></figcaption>
 </figure>  
-<br><br>
+<br>  
   
 ### Model Architectures
 We designed a variety of models to evaluate the incorporation of non-image data to satellite imagery. As a baseline, we first trained traditional machine learning models solely on the non-image features extracted from Google Earth Engine, as well as latitude and longitude coordinates. Logistic regression, k-nearest neighbors (kNN), support vector machines (SVM), and random forests were each evaluated using grid search 5-fold cross-validation to optimize hyperparameters.  
@@ -58,7 +58,7 @@ To represent country information, we used an embedding layer of dimension 16. Th
   <img src="images/biresnet.png" alt="BiResNet Architecture" width="1000"/>
   <figcaption><em>Figure 2: The BiResNet architecture, which concatenates the image and non-image data, before passing them through a dense layer and then the output layer.</em></figcaption>
 </figure>  
-<br><br>
+<br>  
   
 ## Results
 Table II summarizes the test set accuracies achieved by each model across different data modalities and architectural variants. 70% of the images were used for training, and the remaining 30% evenly split for validation and testing. Each deep learning model was trained three times, and the reported results reflect the average test set accuracy.  
@@ -66,15 +66,15 @@ Table II summarizes the test set accuracies achieved by each model across differ
   <img src="images/table2_eurosat.png" alt="EuroSAT Results" width="1000"/>
   <figcaption><em>Table II: Test accuracies. BiResNet with (**) and without (*) a post-concatenation dense layer.</em></figcaption>
 </figure>  
-<br><br>
-
+<br>  
+  
 Traditional machine learning models trained solely on non-image data performed relatively well. The random forest was the best among them, with an accuracy of 85.95%, followed by k-nearest neighbors (81.31%), support vector machines (68.81%), and logistic regression (65.90%). The feature importances are displayed in Figure 3. Each value is the average decrease in test accuracy after permuting the given feature 30 times. Population density and NDVI were the most important (>20 and >16 percentage point decrease, respectively), and the country encoding was the least significant (>1 percentage point).  
 <figure>
   <img src="images/figure3_eurosat.png" alt="RF Feature Importances" width="1000"/>
   <figcaption><em>Figure 3: Feature importances for the random forest model.</em></figcaption>
 </figure>  
-<br><br>
-
+<br>  
+  
 The shallow CNN (SimpleCNN) model achieved 82.17% accuracy when trained on images alone–which is slightly worse than the random forest–but this increased to 87.48% when non-image data was incorporated (SimpleCNN+). ResNet-50, trained only on the EuroSAT images, achieved a strong baseline test accuracy of 97.62%, closely matching the results reported by Helber et al.  
   
 The major contribution of the paper is the new best-performing model, BiResNet, which incorporates non-image data into a ResNet-50 backbone. This model does so by concatenating the 8 geospatial variables from Earth Engine, longitude, latitude, and the country embedding to the ResNet output. BiResNet achieved a test accuracy of 98.21% without the post-concatenation dense layer. When a dense layer of 128 nodes was added after concatenation, performance improved further to 98.69%, suggesting that non-linear mixing of image and non-image features enhances signal extraction (see Figure 4).  
@@ -84,7 +84,7 @@ Overall, these results demonstrate that while satellite images alone provide str
   <img src="images/figure4_eurosat.png" alt="BiResNet Confusion Matrix" width="1000"/>
   <figcaption><em>Figure 4: Confusion matrix of the new best-performing BiResNet model (98.75% accuracy).</em></figcaption>
 </figure>  
-<br><br>
+<br>  
   
 ## Discussion
 This study introduces a new best-performing model for the EuroSAT image classification task: BiResNet, a ResNet-50 architecture enhanced with structured non-image features. By fusing satellite imagery with geospatial variables retrieved from Google Earth Engine, BiResNet achieved a test accuracy of 98.69%.  

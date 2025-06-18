@@ -23,4 +23,7 @@ Our work builds on advances in multi-modal learning, focusing specifically on ea
 ### Data Collection and Preprocessing
 #### Image Data
 Our primary dataset is EuroSAT, a publicly available collection of 27,000 images taken by the Sentinel-2A satellite [3]. Each is 64×64 pixels, with a ground resolution of up to 10 meters per pixel. Thus, each has a resolution of 640 meters in length and height, or around 0.16 square miles. The images are labeled into one of ten land use and land cover classes: Forest, Annual Crop, Permanent Crop, Pasture, Herbaceous Vegetation, Residential, Industrial, Highway, River, and Sea Lake (see Figure 1). Although the EuroSAT paper does not specify exact acquisition dates of the images they use, the earliest date mentioned is August 2015 (two months after the launch of Sentinel-2A) and the latest is March 2017.  
-![Sample EuroSAT Images](images/figure1_eurosat.png)
+<figure>
+  <img src="images/figure1_eurosat.png" alt="Sample EuroSAT Images" width="500"/>
+  <figcaption>Figure 1: Samples of the 10 land cover and land usage labels in EuroSAT. [3]</figcaption>
+</figure>

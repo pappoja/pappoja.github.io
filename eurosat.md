@@ -42,5 +42,19 @@ In the original EuroSAT paper, Helber et al. benchmarked several models across d
 <figure>
   <img src="images/table1_eurosat.png" alt="Sample EuroSAT Images" width="1000"/>
   <figcaption><em>Table I: Classification accuracy across different train-test splits from Helber et al. [3]</em></figcaption>
-</figure>
+</figure>  
+
+### Model Architectures
+We designed a variety of models to evaluate the incorporation of non-image data to satellite imagery. As a baseline, we first trained traditional machine learning models solely on the non-image features extracted from Google Earth Engine, as well as latitude and longitude coordinates. Logistic regression, k-nearest neighbors (kNN), support vector machines (SVM), and random forests were each evaluated using grid search 5-fold cross-validation to optimize hyperparameters.  
+  
+For image-based models, we implemented a shallow two-layer CNN, which we call SimpleCNN. This architecture resembles the 2-layer CNN explored in the original EuroSAT paper, though they do not give specifics on the architectural configuration. We trained SimpleCNN both on image data alone and on image data concatenated with non-image features (SimpleCNN+).  
+  
+We then use the best-performing model from Helber et al., a standard ResNet-50 architecture pre-trained on ImageNet and then fine-tuned solely on image data. To integrate non-image features, we modified the ResNet-50 architecture into a bimodal form, which we call BiResNet. The outputs from the ResNet-50 backbone were concatenated with additional non-image feature vectors.  
+  
+To represent country information, we used an embedding layer of dimension 16. The remaining non-image geospatial features were concatenated into a 10-dimensional vector for integration into the network. We also implemented a dense layer after concatenation with 128 nodes. In sum, a non-image feature vector of length 26 (10 variables + 16 dimension country embedding) were concatenated to the ResNet output before the final classification layer for the joint image/non-image models. This BiResNet architecture is displayed in Figure 2.  
+<figure>
+  <img src="images/figure2_eurosat.png" alt="Sample EuroSAT Images" width="1000"/>
+  <figcaption><em>Figure 2: The BiResNet architecture, which concatenates the image and non-image data, before passing them through a dense layer and then the output layer.</em></figcaption>
+</figure>  
+
 

@@ -64,7 +64,7 @@ Table II summarizes the test set accuracies achieved by each model across differ
   <figcaption><em>Table II: Test accuracies. BiResNet with (**) and without (*) a post-concatenation dense layer.</em></figcaption>
 </figure>  
 
-  
+
 Traditional machine learning models trained solely on non-image data performed relatively well. The random forest was the best among them, with an accuracy of 85.95%, followed by k-nearest neighbors (81.31%), support vector machines (68.81%), and logistic regression (65.90%). The feature importances are displayed in Figure 3. Each value is the average decrease in test accuracy after permuting the given feature 30 times. Population density and NDVI were the most important (>20 and >16 percentage point decrease, respectively), and the country encoding was the least significant (>1 percentage point).  
 <figure>
   <img src="images/figure3_eurosat.png" alt="RF Feature Importances" width="1000"/>

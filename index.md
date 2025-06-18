@@ -14,7 +14,7 @@
 </a>
 
 ### [Enhancing Satellite Image Classification with Non-Image Data](/eurosat)
-<a href="/gain">
+<a href="/eurosat">
   <img src="images/architecture.png" class="project-image">
 </a>
 

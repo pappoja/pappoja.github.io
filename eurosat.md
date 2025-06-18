@@ -40,7 +40,7 @@ To maintain temporal alignment across input features, all time-varying non-image
 ### EuroSAT Benchmarks
 In the original EuroSAT paper, Helber et al. benchmarked several models across different band combinations, weight initializations, and data splits. The models tested included a bag-of-visual-words (BoVW) classifier using SIFT features, a simple 2-layer CNN, GoogleNet, and ResNet-50. For weight initialization, Helber et al. experimented with training models from scratch and fine-tuning from models pre-trained on ILSVRC-2012. They experimented with multiple data splits, with an 80-20 train-test ratio having the best performance. Images were classified using different spectral bands, including color-infrared (CI), short-wave infrared (SWIR), and RGB, the latter of which yielded the highest performance. This benchmark setup informs our own modeling choices, providing a strong and well-understood baseline for evaluating the impact of additional non-image features. See the results from Helber et al. in Table I.  
 <figure>
-  <img src="images/table1_eurosat.png" alt="Sample EuroSAT Images" width="1000"/>
+  <img src="images/table1_eurosat.png" alt="EuroSAT Benchmarks" width="1000"/>
   <figcaption><em>Table I: Classification accuracy across different train-test splits from Helber et al. [3]</em></figcaption>
 </figure>  
 
@@ -53,8 +53,59 @@ We then use the best-performing model from Helber et al., a standard ResNet-50 a
   
 To represent country information, we used an embedding layer of dimension 16. The remaining non-image geospatial features were concatenated into a 10-dimensional vector for integration into the network. We also implemented a dense layer after concatenation with 128 nodes. In sum, a non-image feature vector of length 26 (10 variables + 16 dimension country embedding) were concatenated to the ResNet output before the final classification layer for the joint image/non-image models. This BiResNet architecture is displayed in Figure 2.  
 <figure>
-  <img src="images/biresnet.png" alt="Sample EuroSAT Images" width="1000"/>
+  <img src="images/biresnet.png" alt="BiResNet Architecture" width="1000"/>
   <figcaption><em>Figure 2: The BiResNet architecture, which concatenates the image and non-image data, before passing them through a dense layer and then the output layer.</em></figcaption>
 </figure>  
+
+## Results
+Table II summarizes the test set accuracies achieved by each model across different data modalities and architectural variants. 70% of the images were used for training, and the remaining 30% evenly split for validation and testing. Each deep learning model was trained three times, and the reported results reflect the average test set accuracy.  
+<figure>
+  <img src="images/table2_eurosat.png" alt="EuroSAT Results" width="1000"/>
+  <figcaption><em>Table II: Test accuracies. BiResNet with (**) and without (*) a post-concatenation dense layer.</em></figcaption>
+</figure>  
+
+Traditional machine learning models trained solely on non-image data performed relatively well. The random forest was the best among them, with an accuracy of 85.95%, followed by k-nearest neighbors (81.31%), support vector machines (68.81%), and logistic regression (65.90%). The feature importances are displayed in Figure 3. Each value is the average decrease in test accuracy after permuting the given feature 30 times. Population density and NDVI were the most important (>20 and >16 percentage point decrease, respectively), and the country encoding was the least significant (>1 percentage point).  
+<figure>
+  <img src="images/figure3_eurosat.png" alt="RF Feature Importances" width="1000"/>
+  <figcaption><em>Feature importances for the random forest model.</em></figcaption>
+</figure>  
+
+The shallow CNN (SimpleCNN) model achieved 82.17% accuracy when trained on images alone–which is slightly worse than the random forest–but this increased to 87.48% when non-image data was incorporated (SimpleCNN+). ResNet-50, trained only on the EuroSAT images, achieved a strong baseline test accuracy of 97.62%, closely matching the results reported by Helber et al.  
+  
+The major contribution of the paper is the new best-performing model, BiResNet, which incorporates non-image data into a ResNet-50 backbone. This model does so by concatenating the 8 geospatial variables from Earth Engine, longitude, latitude, and the country embedding to the ResNet output. BiResNet achieved a test accuracy of 98.21% without the post-concatenation dense layer. When a dense layer of 128 nodes was added after concatenation, performance improved further to 98.69%, suggesting that non-linear mixing of image and non-image features enhances signal extraction (see Figure 4).  
+  
+Overall, these results demonstrate that while satellite images alone provide strong predictive signals for land use classification, integrating structured environmental and geospatial features leads to consistent and meaningful performance gains across architectures.  
+<figure>
+  <img src="images/figure4_eurosat.png" alt="BiResNet Confusion Matrix" width="1000"/>
+  <figcaption><em>Figure 4: Confusion matrix of the new best-performing BiResNet model (98.75% accuracy).</em></figcaption>
+</figure>  
+
+## Results
+This study introduces a new best-performing model for the EuroSAT image classification task: BiResNet, a ResNet-50 architecture enhanced with structured non-image features. By fusing satellite imagery with geospatial variables retrieved from Google Earth Engine, BiResNet achieved a test accuracy of 98.69%.  
+  
+The non-image data likely include a combination of complementary and redundant information. On one hand, the geospatial variables will provide environmental or socioeconomic context that is not present in raw RGB pixel values, offering orthogonal signal to what the CNN can extract. On the other hand, some may encode patterns that a CNN could, in theory, infer from visual texture or color gradients. However, explicitly supplying these structured measurements still allows the model to bypass the need to learn them from scratch, freeing up representational capacity to focus on other complementary features. In this way, the non-image data serves both as an information booster and as a regularizer, helping the model converge faster and generalize better by reducing reliance on noisy visual proxies.  
+  
+The additional input does not impose a strong constraint on model deployment. Google Earth Engine provides global coverage for the variables used in this study, enabling inference in new locations without requiring inaccessible or incomplete data sources. Because the non-image variables can be retrieved in a reliable manner, this approach remains practical and generalizable across diverse geographic regions.  
+  
+A key challenge addressed in this work was ensuring alignment between the image and non-image data. Spatially, the non-image geospatial measurements contained the geographic area of the satellite image. Temporally, the non-image variables were averaged over 2016 to correspond with the EuroSAT image acquisition period.  
+  
+Future work could extend this framework by incorporating additional Earth Engine features or alternative metadata sources, testing generalization to other datasets and continents, exploring more advanced fusion techniques such as cross-attention, and leveraging sequential models to process time series of images and measurements over time.  
+
+## References
+1. A. Krizhevsky, I. Sutskever, and G. E. Hinton. Imagenet classification with deep convolutional neural networks. In Advances in neural information processing systems, pages 1097–1105, 2012.
+2. K. He, X. Zhang, S. Ren, and J. Sun. Deep residual learning for image recognition. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.
+3. P. Helber, B. Bischke, A. Dengel and D. Borth. EuroSAT: A novel dataset and deep learning benchmark for land use and land cover classification. In IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, vol. 12, no. 7, pages 2217-2226, 2019.
+4. Christopher Yeh, Anthony Perez, Anne Driscoll, George Azzari, Zhongyi Tang, David Lobell, Stefano Ermon, and Marshall Burke. Using publicly available satellite imagery and deep learning to understand economic well-being in africa. In Nature Communications, 2020.
+5. M. Pettersson, M. Kakooei, J. Ortheden, F. Johansson, and A. Daoud. Time series of satellite imagery improve deep learning estimates of neighborhood-level poverty in africa. In Proceedings of the Thirty-Second International Joint Conference on Artificial Intelligence (IJCAI-23) Special Track on AI for Good, pages 6165-6173, 2023.
+6. Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervision. In International conference on machine learning, pp. 8748–8763. PMLR, 2021.
+7. N. Gorelick, M. Hancher, M. Dixon, S. Ilyushchenko, D. Thau, and R. Moore. Google earth engine: planetary-scale geospatial analysis for everyone. In Remote Sensing of Environment, 202, 18–27, 2017.
+
+
+
+
+
+
+
+
 
 

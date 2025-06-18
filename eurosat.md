@@ -53,7 +53,7 @@ We then use the best-performing model from Helber et al., a standard ResNet-50 a
   
 To represent country information, we used an embedding layer of dimension 16. The remaining non-image geospatial features were concatenated into a 10-dimensional vector for integration into the network. We also implemented a dense layer after concatenation with 128 nodes. In sum, a non-image feature vector of length 26 (10 variables + 16 dimension country embedding) were concatenated to the ResNet output before the final classification layer for the joint image/non-image models. This BiResNet architecture is displayed in Figure 2.  
 <figure>
-  <img src="images/figure2_eurosat.png" alt="Sample EuroSAT Images" width="1000"/>
+  <img src="images/biresnet.png" alt="Sample EuroSAT Images" width="1000"/>
   <figcaption><em>Figure 2: The BiResNet architecture, which concatenates the image and non-image data, before passing them through a dense layer and then the output layer.</em></figcaption>
 </figure>  
 

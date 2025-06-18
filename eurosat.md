@@ -26,4 +26,21 @@ Our primary dataset is EuroSAT, a publicly available collection of 27,000 images
 <figure>
   <img src="images/figure1_eurosat.png" alt="Sample EuroSAT Images" width="1000"/>
   <figcaption><em>Figure 1: Samples of the 10 land cover and land usage labels in EuroSAT. [3]</em></figcaption>
+</figure>  
+
+#### Non-Image Data
+To supplement the images with non-image data, we first extracted the latitude and longitude coordinates embedded in the metadata of the EuroSAT multispectral .tif files. Each image’s geographic center was then mapped to a country based on shapefile boundaries.  
+  
+We then queried environmental and geospatial variables from Google Earth Engine (GEE). Specifically, we retrieved: (1) soil moisture from NASA/SMAP/SPL3SMP_E/006 (9,000 meters/pixel), (2) surface elevation from USGS/SRTMGL1_003 (30 meters/pixel), (3) terrain slope from elevation models, (4) nighttime light intensity from NOAA/VIIRS/DNB (464 meters/pixel), (5) vegetation density (NDVI) from MODIS/061/MOD13A2 (1,000 meters/pixel), (6) surface temperature from MODIS/061/MOD11A2 (1,000 meters/pixel), (7) surface humidity derived from temperature and dewpoint values in ECMWF/ERA5/DAILY (11,132 meters/pixel), and (8) population from WorldPop/GP/100m/pop (93 meters/pixel) [7]. We record measurements at the resolution of the one pixel which contains the coordinate associated with the corresponding EuroSAT image in order to ensure spatial alignment between resolutions. The latitude and longitude were also included among the non-image features.  
+  
+These geospatial measurements are derived from physical modeling and satellite-based sensor data. Although they can be visualized spatially, their coarse resolution relative to the fine-grained EuroSAT image patches makes it more appropriate to treat them as tabular features. Unlike image data, they do not encode texture or visual patterns but represent aggregated environmental attributes over larger geographic grids.  
+  
+To maintain temporal alignment across input features, all time-varying non-image variables were averaged over the full year of 2016. This decision aligns with the timeframe of the EuroSAT image acquisitions, which, as mentioned above, likely range from August 2015 to March 2017. Helber et al. sampled satellite images from across the year to capture seasonal variance, further motivating our decision to limit our non-image data to one calendar year.  
+  
+### EuroSAT Benchmarks
+In the original EuroSAT paper, Helber et al. benchmarked several models across different band combinations, weight initializations, and data splits. The models tested included a bag-of-visual-words (BoVW) classifier using SIFT features, a simple 2-layer CNN, GoogleNet, and ResNet-50. For weight initialization, Helber et al. experimented with training models from scratch and fine-tuning from models pre-trained on ILSVRC-2012. They experimented with multiple data splits, with an 80-20 train-test ratio having the best performance. Images were classified using different spectral bands, including color-infrared (CI), short-wave infrared (SWIR), and RGB, the latter of which yielded the highest performance. This benchmark setup informs our own modeling choices, providing a strong and well-understood baseline for evaluating the impact of additional non-image features. See the results from Helber et al. in Table I.  
+<figure>
+  <img src="images/table1_eurosat.png" alt="Sample EuroSAT Images" width="1000"/>
+  <figcaption><em>Table I: Classification accuracy across different train-test splits from Helber et al. [3]</em></figcaption>
 </figure>
+

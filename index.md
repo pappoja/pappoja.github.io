@@ -15,7 +15,7 @@
 
 ### [Enhancing Satellite Image Classification with Non-Image Data](/eurosat)
 <a href="/eurosat">
-  <img src="images/architecture.png" class="project-image">
+  <img src="images/biresnet.png" class="project-image">
 </a>
 
 ### [Stock Price Prediction](/docs/stock_prediction.html)

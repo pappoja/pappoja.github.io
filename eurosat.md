@@ -1,4 +1,5 @@
 # Enhancing Satellite Image Classification with Non-Image Data
+##### (see the GitHub repo [here](https://github.com/pappoja/eurosat))
 
 ## Introduction
 In the evolving landscape of machine learning, models have progressed from handling simple tabular data to processing more complex data types. Feed-forward neural networks (FFNNs) are well-suited for tabular data, convolutional neural networks (CNNs) for images, and recurrent neural networks (RNNs) or transformers for language and other time series data. More recently, researchers have become interested in combining these foundational architectures into multi-modal hybrid models.  

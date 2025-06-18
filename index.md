@@ -13,6 +13,11 @@
   <img src="images/audio_project_image.png" class="project-image">
 </a>
 
+### [Enhancing Satellite Image Classification with Non-Image Data](/eurosat)
+<a href="/gain">
+  <img src="images/architecture.png" class="project-image">
+</a>
+
 ### [Stock Price Prediction](/docs/stock_prediction.html)
 <a href="/docs/stock_prediction.html">
   <img src="images/stock_project_image.png" class="project-image">

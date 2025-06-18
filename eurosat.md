@@ -67,7 +67,7 @@ Table II summarizes the test set accuracies achieved by each model across differ
 Traditional machine learning models trained solely on non-image data performed relatively well. The random forest was the best among them, with an accuracy of 85.95%, followed by k-nearest neighbors (81.31%), support vector machines (68.81%), and logistic regression (65.90%). The feature importances are displayed in Figure 3. Each value is the average decrease in test accuracy after permuting the given feature 30 times. Population density and NDVI were the most important (>20 and >16 percentage point decrease, respectively), and the country encoding was the least significant (>1 percentage point).  
 <figure>
   <img src="images/figure3_eurosat.png" alt="RF Feature Importances" width="1000"/>
-  <figcaption><em>Feature importances for the random forest model.</em></figcaption>
+  <figcaption><em>Figure 3: Feature importances for the random forest model.</em></figcaption>
 </figure>  
 
 The shallow CNN (SimpleCNN) model achieved 82.17% accuracy when trained on images alone–which is slightly worse than the random forest–but this increased to 87.48% when non-image data was incorporated (SimpleCNN+). ResNet-50, trained only on the EuroSAT images, achieved a strong baseline test accuracy of 97.62%, closely matching the results reported by Helber et al.  
@@ -80,7 +80,7 @@ Overall, these results demonstrate that while satellite images alone provide str
   <figcaption><em>Figure 4: Confusion matrix of the new best-performing BiResNet model (98.75% accuracy).</em></figcaption>
 </figure>  
 
-## Results
+## Discussion
 This study introduces a new best-performing model for the EuroSAT image classification task: BiResNet, a ResNet-50 architecture enhanced with structured non-image features. By fusing satellite imagery with geospatial variables retrieved from Google Earth Engine, BiResNet achieved a test accuracy of 98.69%.  
   
 The non-image data likely include a combination of complementary and redundant information. On one hand, the geospatial variables will provide environmental or socioeconomic context that is not present in raw RGB pixel values, offering orthogonal signal to what the CNN can extract. On the other hand, some may encode patterns that a CNN could, in theory, infer from visual texture or color gradients. However, explicitly supplying these structured measurements still allows the model to bypass the need to learn them from scratch, freeing up representational capacity to focus on other complementary features. In this way, the non-image data serves both as an information booster and as a regularizer, helping the model converge faster and generalize better by reducing reliance on noisy visual proxies.  

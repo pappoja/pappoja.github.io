@@ -8,14 +8,14 @@
   <img src="images/gain_convo.png" class="project-image">
 </a>
 
-### [Audio Sentiment Analysis](/audio_sentiment)
-<a href="/audio_sentiment">
-  <img src="images/audio_project_image.png" class="project-image">
-</a>
-
 ### [Enhancing Satellite Image Classification with Non-Image Data](/eurosat)
 <a href="/eurosat">
   <img src="images/biresnet.png" class="project-image">
+</a>
+
+### [Audio Sentiment Analysis](/audio_sentiment)
+<a href="/audio_sentiment">
+  <img src="images/audio_project_image.png" class="project-image">
 </a>
 
 ### [Stock Price Prediction](/docs/stock_prediction.html)
